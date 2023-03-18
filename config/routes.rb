@@ -1,6 +1,9 @@
 Rails.application.routes.draw do
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
+  root to: 'urls#show'
+  get ':id', to: 'urls#show'
 
-  # Defines the root path route ("/")
-  # root "articles#index"
+  scope '/api' do
+    post '/encode', to: 'urls#encode'
+    get '/decode', to: 'urls#decode'
+  end
 end
