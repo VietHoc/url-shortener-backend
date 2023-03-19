@@ -27,7 +27,7 @@ class UrlsController < ApplicationController
   end
 
   def url_params
-    params.require(:url).permit(:original_url, :short_url)
+    params.permit(:original_url, :short_url)
   end
 
   def get_short_url
