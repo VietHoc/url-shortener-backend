@@ -1,9 +1,6 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  short_url: MyString
-  original_url: MyString
+  short_url: uoeYgw
+  original_url: https://codesubmit.io/library/react
 
-two:
-  short_url: MyString
-  original_url: MyString

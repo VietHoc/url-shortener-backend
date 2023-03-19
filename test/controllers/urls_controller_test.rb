@@ -5,34 +5,44 @@ class UrlsControllerTest < ActionDispatch::IntegrationTest
     @url = urls(:one)
   end
 
-  test "should get index" do
-    get urls_url, as: :json
-    assert_response :success
+  test "should redirect to original url" do
+    get '', params: { id: @url.short_url }
+    assert_redirected_to @url.original_url
   end
 
-  test "should create url" do
+  test "should return error when short url not found" do
+    get '', params: { id: "invalid_id" }
+    assert_response :not_found
+    assert_equal "Short URL not found", JSON.parse(@response.body)["error"]
+  end
+
+  test "should create url with valid params" do
     assert_difference("Url.count") do
-      post urls_url, params: { url: { original_url: @url.original_url, short_url: @url.short_url } }, as: :json
+      post '/api/encode', params: { original_url: "http://www.example.com/testencode" }, headers: { "Accept" => "application/json" }
     end
 
-    assert_response :created
-  end
-
-  test "should show url" do
-    get url_url(@url), as: :json
     assert_response :success
+    assert_equal "http://www.example.com/#{Url.last.short_url}", JSON.parse(@response.body)["short_url"]
   end
 
-  test "should update url" do
-    patch url_url(@url), params: { url: { original_url: @url.original_url, short_url: @url.short_url } }, as: :json
-    assert_response :success
-  end
-
-  test "should destroy url" do
-    assert_difference("Url.count", -1) do
-      delete url_url(@url), as: :json
+  test "should return errors with invalid params" do
+    assert_no_difference("Url.count") do
+      post '/api/encode', params: { original_url: "invalid_url" }, headers: { "Accept": "application/json" }
     end
 
-    assert_response :no_content
+    assert_response :unprocessable_entity
+    assert_equal ["Original url is invalid"], JSON.parse(@response.body)["errors"]
+  end
+
+  test "should decode short url" do
+    get '/api/decode', params: { short_url: "http://www.example.com/#{@url.short_url}" }, headers: { "Accept" => "application/json" }
+    assert_response :success
+    assert_equal @url.original_url, JSON.parse(@response.body)["original_url"]
+  end
+
+  test "should return error when short url not found when decode" do
+    get '/api/decode', params: { short_url:  "http://www.example.com/invalid_short_url"}
+    assert_response :not_found
+    assert_equal "Short URL not found", JSON.parse(@response.body)["error"]
   end
 end
