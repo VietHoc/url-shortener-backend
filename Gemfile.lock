@@ -111,6 +111,7 @@ GEM
       racc (~> 1.4)
     nokogiri (1.14.2-x86_64-linux)
       racc (~> 1.4)
+    pg (1.4.6)
     pry (0.14.2)
       coderay (~> 1.1)
       method_source (~> 1.0)
@@ -153,8 +154,6 @@ GEM
     rake (13.0.6)
     reline (0.3.2)
       io-console (~> 0.5)
-    sqlite3 (1.6.1-x86_64-darwin)
-    sqlite3 (1.6.1-x86_64-linux)
     thor (1.2.1)
     timeout (0.3.2)
     tzinfo (2.0.6)
@@ -171,11 +170,11 @@ PLATFORMS
 DEPENDENCIES
   bootsnap
   debug
+  pg
   pry-rails
   puma (~> 5.0)
   rack-cors
   rails (~> 7.0.4, >= 7.0.4.3)
-  sqlite3 (~> 1.4)
   tzinfo-data
 
 RUBY VERSION
